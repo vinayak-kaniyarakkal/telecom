@@ -1,0 +1,123 @@
+{% extends 'crud/base.html' %}
+{% block 'content' %}
+
+
+
+<style>
+  select {
+    width: 100%;
+    height: 30px
+  }
+textarea {width: 100%;}
+</style>
+
+
+<script>
+    function task(wrt_set) {
+	$('#id_'+wrt_set.parent).change(function() {
+	    parent_val=$(this).val();
+	    $.each($('#id_'+wrt_set.child).children(), function() {
+		if((wrt_set.mapping[this.value]!=parent_val) && this.value) {
+		    $(this).attr('selected', false);
+		    $(this).prop('disabled', true);
+		    $(this).hide();
+		} else {
+		    $(this).prop('disabled', false);
+		    $(this).show();
+		}
+	    });
+	    $('#id_'+wrt_set.child).trigger('change')
+	})
+	$('#id_'+wrt_set.parent).trigger('change')
+    }
+
+    {% for wrt_set in dropdown_wrt %}
+    $(function() {
+	task({{ wrt_set|safe }})
+    })
+    {% endfor %}
+    {% block 'custom_scripts' %}
+    {% endblock %}
+</script>
+
+
+<script>
+    $(function() {
+	$('input[type=text], input[type=number], input[type=email], input[type=file]').addClass('form-control')
+    })
+</script>
+
+
+{% if datepickers %}
+<script>
+{% for i in datepickers %}
+$(function() {
+    $('#id_'+'{{ i }}').attr('readonly', true);
+    $('#id_'+'{{ i }}').datepicker({'changeYear': true, 'yearRange': '1950:2020'});
+})
+{% endfor %}
+</script>
+{% endif %}
+
+
+{% if timepickers %}
+<script>
+{% for i in timepickers %}
+$(function() {
+    $('#id_'+'{{ i }}').timepicker();
+})
+{% endfor %}
+</script>
+{% endif %}
+
+
+<div id="content" class="col-lg-10 col-sm-10">
+  <div class="row">
+    <div class="box col-md-12" align="center">
+      <div class="box-inner" style="width:90%">
+	<div class="box-header well" data-original-title="">
+          <h2><i class="glyphicon"></i>{{ model_nicely }}</h2>
+	</div>
+        <div class="box-content">
+	  {% if overtable_template %}
+	  {% include overtable_template %}
+	  {% endif %}
+          <form action="." method = "post" enctype="multipart/form-data">{% csrf_token %}
+          <table class="table table-striped table-bordered bootstrap-datatable datatable ">
+            <tbody>
+              {% for field in form %}
+              <tr class="form-row-{{ field.name }}">
+		<td>
+		  {{ field.label_tag|safe }}{% if field.field.required %} <b>*</b>{% endif %}	
+		</td>
+		<td>
+		  {{ field }}
+		  <p style="color:red">{% if field.errors %}{{ field.errors|striptags }}{% endif %}</p>
+		</td>
+              </tr>
+	      
+	      {% endfor %} 
+              <tr>
+		<td>
+		  <button type="submit" class="btn btn-primary submit-button">
+		    <i class="glyphicon glyphicon-ok icon-white"></i>
+		    Submit
+		  </button>
+		</td>
+		<td>
+		  <a href="/"><button type="button" class="btn btn-primary">
+		      <i class="glyphicon glyphicon-remove icon-white"></i>
+		      Cancel
+		  </button></a>
+		</td>
+              </tr>
+            </tbody>
+          </table>
+          </form>
+	  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

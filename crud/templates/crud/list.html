@@ -1,0 +1,141 @@
+
+{% extends 'crud/base.html' %}
+{% block 'content' %}
+{% load crud_tags %}
+
+<script>
+  $(function() {
+      $('.export').click(function() {
+	  $('.list-table').table2csv();
+      })
+      $('.restore-button').hide();
+      $('.delete-button').click(function() {
+	  id = $(this).data('id');
+	  $.ajax({
+	      type: 'GET',
+	      url: './delete/'+id+'/',
+	      data: {'id': id},
+	      dataType: 'json',
+	      success: function(d) {
+		  $('.restore-button-'+id).show()
+		  $('.delete-button-'+id).hide()
+	      }
+	  })
+      })
+      $('.restore-button').click(function() {
+	  id = $(this).data('id');
+	  $.ajax({
+	      type: 'GET',
+	      url: './delete/'+id+'/',
+	      data: {'id': id},
+	      dataType: 'json',
+	      success: function(d) {
+		  $('.delete-button-'+id).show()
+		  $('.restore-button-'+id).hide()
+	      }
+	  })
+      })
+  })
+</script>
+
+
+<div id="content" class="col-lg-10 col-sm-10" style="width:100%">
+
+  {% if breadcrum %}
+  <div>
+    <ul class="breadcrumb">
+      {% for i in breadcrum %}
+      <li>
+	{% if i.link %}
+	<a href="{{ i.link }}">{{ i.title }}</a>
+	{% else %}
+	{{ i.title }}
+	{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="box col-md-12">
+      <div class="box-inner">
+	<div class="box-header well" data-original-title="">
+          <h2>
+	    <i class="glyphicon"></i>
+	    {{ model_nicely }}{% if parent_model %}s of {{ parent }}{% endif %}
+	  </h2>
+	  <div style="float:right">
+	    <a href="#" class="btn fancybox btn-xs btn-primary export">
+              Export {{ model_nicely }}
+            </a>
+	  </div>
+	</div>
+
+
+	<div class="box-content">
+
+	  {% if object_list %}
+          <table class="table table-striped table-bordered bootstrap-datatable datatable responsive list-table">
+            <thead>
+              <tr>
+		{% for i in fields %}
+		<th>{{ i|look_good }}</th>
+		{% endfor %}
+		
+		<th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for obj in object_list %}
+              <tr>
+
+		{% for field in fields %}
+		<td>
+		  {% with obj|get_attr:field as field %}
+		  {{ field|safe }}
+		  {% endwith %}
+		</td>
+		{% endfor %}
+
+		<td style="white-space: nowrap">
+                  {% if enable_edit %}
+		  <a href="./{{obj.id}}/" class="btn fancybox btn-xs btn-info">
+                    <i class="glyphicon glyphicon-edit icon-white"></i>
+                    Edit
+                  </a>
+		  {% for button in buttons %}
+		  <a href="{{ button.url|string_format:obj.id }}" class="btn fancybox btn-xs btn-warning">
+                    <i class="glyphicon glyphicon-align-justify icon-white"></i>
+                    {{ button.name }}
+                  </a>
+		  {% endfor %}
+                  {% endif %}
+
+		  {% if enable_delete %}
+		  <a href="#" class="btn fancybox btn-xs btn-danger delete-button delete-button-{{ obj.id }}" data-id="{{ obj.id }}">
+                    <i class="glyphicon glyphicon-trash icon-white"></i>
+                    Delete
+                  </a>
+		  <a href="#" class="btn fancybox btn-xs btn-success restore-button restore-button-{{ obj.id }}" data-id="{{ obj.id }}">
+                    <i class="glyphicon glyphicon-ok icon-white"></i>
+                    Restore
+                  </a>
+		  
+		  {% endif %}
+		</td>
+              </tr>
+	      {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="alert alert-info">
+            No Records found.
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

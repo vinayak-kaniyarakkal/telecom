@@ -1,0 +1,157 @@
+{% load staticfiles %}
+{% load crud_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--
+        ===
+        This comment should NOT be removed.
+	
+        Charisma v2.0.0
+	
+        Copyright 2012-2014 Muhammad Usman
+        Licensed under the Apache License v2.0
+        http://www.apache.org/licenses/LICENSE-2.0
+	
+        http://usman.it
+        http://twitter.com/halalit_usman
+        ===
+      -->
+    <meta charset="utf-8">
+    <title>{% block title %}RPL-SSRDP{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Recognition to prior learning">
+    <meta name="author" content="Vinayak Kaniyarakkal">
+    
+    <!-- The styles -->
+    <link id="bs-css" href="{% static "charisma/css/bootstrap-cerulean.min.css" %}" rel="stylesheet">
+    
+    <link href="{% static "charisma/css/charisma-app.css" %}" rel="stylesheet">
+    <link href="{% static "charisma/bower_components/fullcalendar/dist/fullcalendar.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/bower_components/fullcalendar/dist/fullcalendar.print.css" %}" rel='stylesheet' media='print'>
+    <link href="{% static "charisma/bower_components/chosen/chosen.min.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/bower_components/colorbox/example3/colorbox.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/bower_components/responsive-tables/responsive-tables.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/css/jquery.noty.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/css/noty_theme_default.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/css/elfinder.min.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/css/elfinder.theme.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/css/jquery.iphone.toggle.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/css/uploadify.css" %}" rel='stylesheet'>
+    <link href="{% static "charisma/css/animate.min.css" %}" rel='stylesheet'>
+    
+     <!-- 
+<link href="{% static "loader/loading.css" %}" rel='stylesheet'> -->
+
+    
+    <!-- jQuery -->
+    <script src="{% static "charisma/bower_components/jquery/jquery.min.js" %}"></script>
+    
+    <link rel="shortcut icon" href="{% static "charisma/img/favicon.ico" %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+
+        
+
+
+    <link  href="{% static "tree-multiselect/jquery.tree-multiselect.min.css" %}" rel='stylesheet'>
+    <script src="{% static "tree-multiselect/jquery.tree-multiselect.min.js" %}"></script>
+
+    <link  href="{% static "timepicker/timepicker.css" %}" rel='stylesheet'>
+    <script src="{% static "timepicker/timepicker.js" %}"></script>
+    
+    <script src="{% static "table-to-csv/table2csv.js" %}"></script>
+
+  </head>
+  
+  <body>
+    {% block 'head' %}
+    <!-- topbar starts -->
+    <div class="navbar navbar-default" role="navigation">
+      
+      <div class="navbar-inner">
+	{% if request.user.is_authenticated %}
+	<a href="/user/logout/">
+          <div class="btn-group pull-right">
+            <button class="btn btn-default">
+              <i class="glyphicon glyphicon-user"></i>Logout ({{ request.user.get_role_display }} {{ request.user.first_name }})
+            </button>
+          </div>
+	</a>
+	{% else %}
+	<a href="/admin/login/?next={{ request.path }}">
+          <div class="btn-group pull-right">
+            <button class="btn btn-default">
+              <i class="glyphicon glyphicon-user"></i>Login
+            </button>
+          </div>
+	</a>
+	{% endif %}
+        <ul class="collapse navbar-collapse nav navbar-nav top-menu">
+
+	  <li>
+	    <a href="/" style="padding-top: 0px; padding-bottom:0px">
+	      <img alt="" style="widht: 50; height: 25" src="{% static "logo.png" %}" >
+	    </a>
+	  </li>
+	  
+
+          <li><a href="/item1-url">Item 1</a></li>
+
+        </ul>
+	
+      </div>
+    </div>
+    <!-- topbar ends -->
+    {% endblock %}
+    <div class="ch-container">
+      <div class="row">
+        {% block 'content' %}{% endblock %}
+      </div><!--/fluid-row-->
+    </div>
+    {% if alert %}
+    <script>
+      $(function() {
+	  alert("{{ alert }}")
+      })
+    </script>
+    {% endif %}
+    <!-- external javascript -->
+    
+    <script src="{% static "charisma/bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+    
+    <!-- library for cookie management -->
+    <script src="{% static "charisma/js/jquery.cookie.js" %}"></script>
+    <!-- calender plugin -->
+    <script src="{% static "charisma/bower_components/moment/min/moment.min.js" %}"></script>
+    <script src="{% static "charisma/bower_components/fullcalendar/dist/fullcalendar.min.js" %}"></script>
+    <!-- data table plugin -->
+    <script src="{% static "charisma/js/jquery.dataTables.min.js" %}"></script>
+    
+    <!-- select or dropdown enhancer -->
+    <script src="{% static "charisma/bower_components/chosen/chosen.jquery.min.js" %}"></script>
+    <!-- plugin for gallery image view -->
+    <script src="{% static "charisma/bower_components/colorbox/jquery.colorbox-min.js" %}"></script>
+    <!-- notification plugin -->
+    <script src="{% static "charisma/js/jquery.noty.js" %}"></script>
+    <!-- library for making tables responsive -->
+    <script src="{% static "charisma/bower_components/responsive-tables/responsive-tables.js" %}"></script>
+    <!-- tour plugin -->
+    <script src="{% static "charisma/bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js" %}"></script>
+    <!-- star rating plugin -->
+    <script src="{% static "charisma/js/jquery.raty.min.js" %}"></script>
+    <!-- for iOS style toggle switch -->
+    <script src="{% static "charisma/js/jquery.iphone.toggle.js" %}"></script>
+    <!-- autogrowing textarea plugin -->
+    <script src="{% static "charisma/js/jquery.autogrow-textarea.js" %}"></script>
+    <!-- multiple file upload plugin -->
+    <script src="{% static "charisma/js/jquery.uploadify-3.1.min.js" %}"></script>
+    <!-- history.js for cross-browser state change on ajax -->
+    <script src="{% static "charisma/js/jquery.history.js" %}"></script>
+    <!-- application script for Charisma demo -->
+    <script src="{% static "charisma/js/charisma.js" %}"></script>
+    
+    <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+
+  </body>
+</html>
