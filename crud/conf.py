@@ -1,24 +1,9 @@
-
-
 def is_admin(user):
     try:
         return user.role == 'admin'
     except:
         return False
 
-
-def is_part(user):
-    try:
-        return user.role == 'p'
-    except:
-        return False
-
-
-def admin_or_cordinator(user):
-    try:
-        return user.role in ['admin', 'co']
-    except:
-        return False
 
 def logged_in(user):
     return user.is_authenticated()
@@ -36,6 +21,20 @@ CONF = {
     'menu': [
     ],
     'model_map': {
-
+        'customer': {
+            'address': 'customer.Customer',
+            'buttons': [{'name': 'Login', 'url': '/subscription/customer-%s/'}],
+            'fields': 'name',
+            'permission': truth_func,
+            'enable_edit': lambda user: False,
+        },
+        'subscription': {
+            'address': 'customer.Subscription',
+            'fields': 'plan active',
+            'add_fields': 'plan',
+            'permission': truth_func,
+            'enable_edit': lambda user: False,
+            'enable_delete': lambda user: True,
+        },
     },
 }

@@ -41,22 +41,6 @@
 
 <div id="content" class="col-lg-10 col-sm-10" style="width:100%">
 
-  {% if breadcrum %}
-  <div>
-    <ul class="breadcrumb">
-      {% for i in breadcrum %}
-      <li>
-	{% if i.link %}
-	<a href="{{ i.link }}">{{ i.title }}</a>
-	{% else %}
-	{{ i.title }}
-	{% endif %}
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
-
   <div class="row">
     <div class="box col-md-12">
       <div class="box-inner">
@@ -99,13 +83,13 @@
                     <i class="glyphicon glyphicon-edit icon-white"></i>
                     Edit
                   </a>
-		  {% endif %}
 		  {% for button in buttons %}
 		  <a href="{{ button.url|string_format:obj.id }}" class="btn fancybox btn-xs btn-warning">
                     <i class="glyphicon glyphicon-align-justify icon-white"></i>
                     {{ button.name }}
                   </a>
 		  {% endfor %}
+                  {% endif %}
 
 		  {% if enable_delete %}
 		  <a href="#" class="btn fancybox btn-xs btn-danger delete-button delete-button-{{ obj.id }}" data-id="{{ obj.id }}">

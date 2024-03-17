@@ -17,8 +17,10 @@ def deepgetattr(obj, attr):
 
 
 def index(request):
+    from customer.models import Customer
     return render(request, 'crud/dashboard.html', {
-        'alert': request.GET.get('alert')
+        'object_list': Customer.objects.all(),
+        'alert': request.GET.get('alert'),
     })
 
 
@@ -38,8 +40,7 @@ class Manage(object):
 
     def get_queryset(self):
         qs = super(Manage, self).get_queryset()
-        qs = qs.filter(active=2)
-        if hasattr(self.model, 'filter_queryset_for_user') and self.request.user.is_authenticated():
+        if hasattr(self.model, 'filter_queryset_for_user') and self.request.user.is_authenticated:
             return self.model.filter_queryset_for_user(qs, self.request.user)
         return qs
 
@@ -185,7 +186,7 @@ class AddEditMixin(PartialManage):
 
     def get_form(self, form_class=None):
         form = super(AddEditMixin, self).get_form(form_class)
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return form
         fk = {key: value
               for (key, value) in form.fields.items()
@@ -209,7 +210,7 @@ class Update(AddEditMixin, g.UpdateView):
 
     def form_valid(self, form):
         res = super(Update, self).form_valid(form)
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             self.object.modified_by = self.request.user
             self.object.save()
         return res
@@ -224,7 +225,7 @@ class Create(AddEditMixin, g.CreateView):
             self.object.save()
             return HttpResponseRedirect(self.get_success_url())
         res = super(Create, self).form_valid(form)
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             self.object.created_by = self.request.user
             self.object.save()
         return res
@@ -241,7 +242,7 @@ class Create(AddEditMixin, g.CreateView):
         return res
 
 
-class Delete(Manage, g.DeleteView):
+class Delete(PartialManage, g.DeleteView):
     def dispatch(self, *args, **kwargs):
         self.get_object().switch()
         return JsonResponse({})

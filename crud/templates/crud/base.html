@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 {% load crud_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -18,9 +18,9 @@
         ===
       -->
     <meta charset="utf-8">
-    <title>{% block title %}RPL-SSRDP{% endblock %}</title>
+    <title>{% block title %}Altimetrik Telecom{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Recognition to prior learning">
+    <meta name="description" content="telecom">
     <meta name="author" content="Vinayak Kaniyarakkal">
     
     <!-- The styles -->
@@ -41,8 +41,8 @@
     <link href="{% static "charisma/css/uploadify.css" %}" rel='stylesheet'>
     <link href="{% static "charisma/css/animate.min.css" %}" rel='stylesheet'>
     
-     <!-- 
-<link href="{% static "loader/loading.css" %}" rel='stylesheet'> -->
+
+<link href="{% static "loader/loading.css" %}" rel='stylesheet'>
 
     
     <!-- jQuery -->
@@ -70,23 +70,6 @@
     <div class="navbar navbar-default" role="navigation">
       
       <div class="navbar-inner">
-	{% if request.user.is_authenticated %}
-	<a href="/user/logout/">
-          <div class="btn-group pull-right">
-            <button class="btn btn-default">
-              <i class="glyphicon glyphicon-user"></i>Logout ({{ request.user.get_role_display }} {{ request.user.first_name }})
-            </button>
-          </div>
-	</a>
-	{% else %}
-	<a href="/admin/login/?next={{ request.path }}">
-          <div class="btn-group pull-right">
-            <button class="btn btn-default">
-              <i class="glyphicon glyphicon-user"></i>Login
-            </button>
-          </div>
-	</a>
-	{% endif %}
         <ul class="collapse navbar-collapse nav navbar-nav top-menu">
 
 	  <li>
@@ -96,8 +79,11 @@
 	  </li>
 	  
 
-          <li><a href="/item1-url">Item 1</a></li>
-
+          <li><a href="/customer">Logout</a></li>
+          <li><a href="/customer/add/">Sign Up</a></li>
+	  {% if model_nicely == "Subscription" %}
+          <li><a href="add/">New Subscription</a></li>
+	  {% endif %}
         </ul>
 	
       </div>

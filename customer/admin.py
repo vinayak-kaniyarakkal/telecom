@@ -1,3 +1,9 @@
-from django.contrib import admin
+from crud.admin import register
+from .models import Customer, Plan, Subscription
+namespace = globals()
 
-# Register your models here.
+
+for i in [
+        Customer, Plan, Subscription,
+]: register(i, namespace)
+
